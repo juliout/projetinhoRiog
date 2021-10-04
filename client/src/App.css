@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap');
+
+*{
+  padding: 0;
+  margin: 0;  
+  font-family: 'Fjalla One', sans-serif;
+  color: white;
+  list-style: none;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+body{
+  background-image: url('./images/fundo.jpg');
+  width: 100%;
+  height: auto;
+}
+

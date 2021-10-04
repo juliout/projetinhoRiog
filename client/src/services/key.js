@@ -1,0 +1,1 @@
+export const Key = 'RGAPI-b1c26a2f-a715-4b96-b004-101abc913e49'
