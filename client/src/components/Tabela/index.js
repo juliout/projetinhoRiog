@@ -5,7 +5,7 @@ import React from 'react';
 export default function Tabela({children}) {
     return (
     <Table>
-       {children}
+      {children}
     </Table>
  );
 }

@@ -1,60 +1,73 @@
-import RiotApi from '../../services/api';
+import { RioG } from '../../services/api';
 import { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { ContainerPai, CaixaPesquisa, PerfilHome, Container, CxEsquerda, CxDireita } from './home.js'
-import { Key } from '../../services/key'
+import Loading from '../../components/loading';
+
 export default function Home(){
 
     let [summoner, setsummoner] = useState({})
     let [iconBorder, setIconBorder] = useState('')
     let [displayPerfil, setDisplayPerfil] = useState('none')
+    let [have, setHave] = useState(false)
 
     async function pesquisar(value) {
         
         if(value) {
-
-          setDisplayPerfil('none')
-          setsummoner({})
-
-          const response = await RiotApi.get(`/lol/summoner/v4/summoners/by-name/${value}?api_key=${Key}`).catch(()=>{
-            alert('Não foi possivel achar o campeão')
-            return window.location.reload()
-          })
-          const person = await RiotApi.get(`/lol/league/v4/entries/by-summoner/${response.data.id}?api_key=${Key}`)
-        
-          let RPerson = person.data[0]
-          if(RPerson) {
-            setsummoner({
-              'id' : response.data.id,
-              'name' : response.data.name,
-              'tier' : RPerson.tier , 
-              'rank' : RPerson.rank,
-              'wins' : RPerson.wins,
-              'losses' : RPerson.losses,
-              'icon' : response.data.profileIconId,
-              'level' : response.data.summonerLevel
-          })
-          selectIconBorder(response.data.summonerLevel)
-          setDisplayPerfil('flex')
-        
-          } else {
-            setsummoner({
-              'name' : response.data.name,
-              'icon' : response.data.profileIconId,
-              'level' : response.data.summonerLevel,
-              'wins' : 0,
-              'losses': 0,
-              'rank' : 'unranked'
-            })
-            selectIconBorder(response.data.summonerLevel)
+          try{
             setDisplayPerfil('flex')
-          }  
-        } else {
-          setsummoner({})
-          setDisplayPerfil('none')
-        }
+            setsummoner({})
+                               
+            const response = await RioG.post(`/user`,{
+              name: value
+            })
+            if(!response){
+              alert('usario não encontrado')
+              return window.location.href = '/';
+            }
+            let user = response.data
+            let usuario = user.usuario
+            let ranked = user.ranked   
+            
+            if(user.ranked !== "unranked"){
+                setsummoner({
+                  'id' : usuario.id,
+                  'name' : usuario.name,
+                  'tier' : ranked.tier, 
+                  'rank' : ranked.rank,
+                  'wins' : ranked.wins,
+                  'losses' : ranked.losses,
+                  'icon' : usuario.profileIconId,
+                  'level' : usuario.summonerLevel
+                })
+              selectIconBorder(usuario.summonerLevel)
+              setDisplayPerfil('flex')              
+            }else{
+              setsummoner({
+                'id' : usuario.id,
+                'name' : usuario.name,
+                'icon' : usuario.profileIconId,
+                'level' :usuario.summonerLevel,
+                'wins' : 0,
+                'losses': 0,
+                'rank' : 'unranked'
+              })
+              selectIconBorder(usuario.summonerLevel)
+              setDisplayPerfil('flex')
+                            
+            }
+            setHave(true)
+          } catch (e) {
+            alert('usario não encontrado')
+            return window.location.href = '/';
+          }
+      }else{
+        setsummoner({})
+        setDisplayPerfil('none')  
+        setHave(false)     
       }
-      
+
+    }
       function selectIconBorder(value) {
         
         let link = '/images/borderIcon/'
@@ -93,7 +106,6 @@ export default function Home(){
         if(value >= 300){
           return setIconBorder(link+'300.png')
         }      
-      
       }      
       
       return (
@@ -116,6 +128,8 @@ export default function Home(){
             </CaixaPesquisa>
 
             <PerfilHome display={displayPerfil}>
+              {have === false ? <Loading/> : 
+              <>
               <CxEsquerda>
 
                 <span className='lvlS'>{summoner.level}</span>
@@ -135,7 +149,7 @@ export default function Home(){
                   <button>Mais informações</button>
                 </Link>
               </CxDireita>
-
+             </> }
             </PerfilHome>
 
           </Container>

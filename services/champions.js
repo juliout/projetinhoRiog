@@ -136,7 +136,7 @@ export function SChanpion(id){
     case 59: return "Jarvan IV" 
     case 81: return "Ezreal"
     default: 
-        alert('chanpion não encontrado')
+        return 'Annie'
     }
 
 }

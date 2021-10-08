@@ -10,7 +10,7 @@ export const Table = styled.div`
     border: 1px black solid ;
     display:flex;
     flex-direction: column;
-    margin-top: 20vh;
+    margin: 2vh 0;
     padding: 10px;
 
 `;

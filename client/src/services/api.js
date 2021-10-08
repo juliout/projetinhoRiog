@@ -1,7 +1,5 @@
 import axios from "axios";
 
-const RiotApi = axios.create({
-  baseURL: 'https://br1.api.riotgames.com'  
+export const RioG = axios.create({
+  baseURL: 'http://localhost:3000/'
 })
-
-export default RiotApi;

@@ -1,13 +1,12 @@
 import { PerfilCard } from "./card";
 import { SChanpion } from "../../services/chanpions";
+
 import { useEffect, useState } from "react";
-import RiotApi from "../../services/api";
-import { Key } from "../../services/key";
 
 
-export default function Card({id, icon, name, tier, rank, wins, losses}) {
 
-  let [ fundoP, setFundoP] = useState(1)
+
+export default function Card({icon, name, tier, rank, wins, losses, fundo}) {
   let [ bg, setBg] = useState('black')
 
   useEffect(()=>{
@@ -24,18 +23,11 @@ export default function Card({id, icon, name, tier, rank, wins, losses}) {
       }
     }
     
-    function fundo(){
-      RiotApi.get(`/lol/champion-mastery/v4/champion-masteries/by-summoner/${id}?api_key=${Key}`).then((fundo)=>{
-        if(fundo.data.length !== 0){
-          setFundoP(fundo.data[0].championId)
-        }
-        else{
-          alert('n tem')
-        }
-      })
+    function border(){
+
     }
-    fundo()
-    maior(wins, losses)
+    border()
+    maior(wins, losses)    
     
   },[wins])
   
@@ -44,7 +36,7 @@ export default function Card({id, icon, name, tier, rank, wins, losses}) {
 
     <PerfilCard background={bg}>
       <div className='info'>
-        <p>Ranked solo: <strong> {tier === 0 ? 'un' : ' ' + tier}{rank === 0 ? 'ranked' : ' ' + rank}</strong></p>
+        <p>Ranked solo: <strong> {tier === 'unranked' ? 'un' : ' ' + tier}{rank === 'unranked' ? 'ranked' : ' ' + rank}</strong></p>
 
         <div className='wl'>
           <span>W: {wins}</span>
@@ -52,11 +44,11 @@ export default function Card({id, icon, name, tier, rank, wins, losses}) {
         </div>
 
         <span>{name}</span>
-        <img src={`/images/profileIcon/${icon}.png`} alt="" />
+        <img src={`/images/profileIcon/${icon ? icon : 0 }.png`} alt="" />
 
       </div>
-      <img src={`/images/ranked/borderLoad/${tier}.png`} alt="" className='borderElo' />
-      <img src={`/images/loading/${SChanpion(fundoP)}_0.jpg`} alt="" className='banner'/>
+      <img src={`/images/ranked/borderLoad/${tier === 'unranked' || !tier ? 0 : tier }.png`} alt="" className='borderElo' />
+      <img src={`/images/loading/${SChanpion(fundo ? fundo : 1)}_0.jpg`} alt="" className='banner'/>
       
     </PerfilCard>
   );

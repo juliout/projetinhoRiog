@@ -1,1 +1,1 @@
-module.exports.Key = 'RGAPI-efb0b68e-239f-4b76-8504-c932325c0ced'
+module.exports.Key = 'RGAPI-983502c8-050e-47cc-bd08-1485432cd266'
