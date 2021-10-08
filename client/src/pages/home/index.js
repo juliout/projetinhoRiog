@@ -17,7 +17,7 @@ export default function Home(){
           try{
             setDisplayPerfil('flex')
             setsummoner({})
-                               
+            setHave(false)  
             const response = await RioG.post(`/user`,{
               name: value
             })
