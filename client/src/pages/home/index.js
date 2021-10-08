@@ -134,8 +134,7 @@ export default function Home(){
 
                 <span className='lvlS'>{summoner.level}</span>
                 <img src={iconBorder} alt="" className='bord'/>
-                <img src={`/images/profileIcon/${summoner.icon}.png`} alt="" className='icon'/>
-
+                <img src={`http://ddragon.leagueoflegends.com/cdn/11.20.1/img/profileicon/${summoner.icon}.png`} alt="" className='icon'/>
               </CxEsquerda>
               <CxDireita>
                 <h1>{summoner.name}</h1>

@@ -44,7 +44,7 @@ export default function Card({icon, name, tier, rank, wins, losses, fundo}) {
         </div>
 
         <span>{name}</span>
-        <img src={`/images/profileIcon/${icon ? icon : 0 }.png`} alt="" />
+        <img src={`http://ddragon.leagueoflegends.com/cdn/11.20.1/img/profileicon/${icon}.png`} alt="" />
 
       </div>
       <img src={`/images/ranked/borderLoad/${tier === 'unranked' || !tier ? 0 : tier }.png`} alt="" className='borderElo' />
