@@ -4,11 +4,15 @@ import { useParams } from 'react-router-dom'
 import { Main, Line } from './perfil'
 import Tabela from "../../components/Tabela";
 import Card from "../../components/Card";
+import Loading from "../../components/loading";
 
 export default function Perfil() {
 
   let [user, setUser] = useState({})
   let [matchs, setMatchs] = useState([])
+  let [load, setLoad] = useState(false)
+  
+
   const { id } = useParams();
   function sImg(value){
     if(value <= 0){
@@ -22,6 +26,7 @@ export default function Perfil() {
     
     function acharUsuario() {
       try{
+        
         RioG.post(`/user`,{
           name : id
         }).then((response)=>{
@@ -53,14 +58,16 @@ export default function Perfil() {
               'fundo' : response.data.fundo
             })
           }
+          setLoad(true)
         })      
-        acaharPartida()
+
       }catch (e){
           alert('Não existe esse usuario')
           return window.location.href = '/';
       }
     }
     acharUsuario()
+    acaharPartida()
     
     function acaharPartida(){
       RioG.post(`/user/partidas`,{
@@ -83,52 +90,52 @@ export default function Perfil() {
   return (
     
     <Main>
-      <aside>
-        <Card id={user.id}
-        icon={user.icon} name={user.name}
-        tier={user.tier} rank={user.rank}
-        wins={user.wins} losses={user.losses}
-        fundo={user.fundo}
-         />
-      </aside>
-      <main>
-        <Tabela>
-          {matchs.map((m,index)=>{
-            return(
-              <Line key={index}>                
-                <p>{m.champLevel}</p>
-                  <img src={`/images/iconChampion/${m.championName}.png`} alt="" />
-                  <div className='leftStamp'>
-                      <h1>{m.win === true ? 'Win' : 'Loser' }</h1>
-                      <span>{m.mapId === 11 ? 'Summoners rift' : 'Aram'}</span>
-                      <div className='imgSpells'>
-                          <img src={`/images/spells/${m.summoner1Id}.png`} alt="" />
-                          <img src={`/images/spells/${m.summoner2Id}.png`} alt="" />
+      {load === false ? <Loading/> : 
+      <>
+        <aside>         
+          <Card id={user.id}
+          icon={user.icon} name={user.name}
+          tier={user.tier} rank={user.rank}
+          wins={user.wins} losses={user.losses}
+          fundo={user.fundo}
+          />
+        </aside>
+        <main>
+          <Tabela>          
+              {matchs.map((m,index)=>{
+                return(
+                  <Line key={index}>                
+                    <p>{m.champLevel}</p>
+                      <img src={`/images/iconChampion/${m.championName}.png`} alt="" />
+                      <div className='leftStamp'>
+                          <h1>{m.win === true ? 'Victory' : 'Defeat' }</h1>
+                          <span>{m.mapId === 11 ? 'Summoners rift' : 'Aram'}</span>
+                          <div className='imgSpells'>
+                              <img src={`/images/spells/${m.summoner1Id}.png`} alt="" />
+                              <img src={`/images/spells/${m.summoner2Id}.png`} alt="" />
+                          </div>
                       </div>
-                  </div>
-                  <div className='kda'>
-                    <span>{m.kills} / {m.deaths} / {m.assists}</span>
-                    <span>gold: {m.goldEarned}</span> 
-                  </div>
-                  
-                  <div className='imgItens'>
-                    <img src={sImg(`${m.item0}`)} alt="" />
-                    <img src={sImg(`${m.item1}`)} alt="" />
-                    <img src={sImg(`${m.item2}`)} alt="" />
-                    <img src={sImg(`${m.item3}`)} alt="" />
-                    <img src={sImg(`${m.item4}`)} alt="" />
-                    <img src={sImg(`${m.item5}`)} alt="" />
-                    <img src={sImg(`${m.item6}`)} alt="" />
-                  </div>
-
-                
-                </Line>            
-            )
-          })}
-        </Tabela>
-
-      </main>
-
+                      <div className='kda'>
+                        <span>{m.kills} / {m.deaths} / {m.assists}</span>
+                        <span>gold: {m.goldEarned}</span> 
+                      </div>
+                      
+                      <div className='imgItens'>
+                        <img src={sImg(`${m.item0}`)} alt="" />
+                        <img src={sImg(`${m.item1}`)} alt="" />
+                        <img src={sImg(`${m.item2}`)} alt="" />
+                        <img src={sImg(`${m.item3}`)} alt="" />
+                        <img src={sImg(`${m.item4}`)} alt="" />
+                        <img src={sImg(`${m.item5}`)} alt="" />
+                        <img src={sImg(`${m.item6}`)} alt="" />
+                      </div>                
+                    </Line>            
+                )
+              })}
+          </Tabela>   
+        </main>
+      </>
+    }
     </Main>
     
   );

@@ -21,6 +21,7 @@ export default function Home(){
             const response = await RioG.post(`/user`,{
               name: value
             })
+            console.log(response)
             if(!response){
               alert('usario não encontrado')
               return window.location.href = '/';
@@ -53,8 +54,7 @@ export default function Home(){
                 'rank' : 'unranked'
               })
               selectIconBorder(usuario.summonerLevel)
-              setDisplayPerfil('flex')
-                            
+              setDisplayPerfil('flex')                            
             }
             setHave(true)
           } catch (e) {
